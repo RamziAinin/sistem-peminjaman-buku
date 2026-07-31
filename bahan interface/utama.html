@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Perpanjangan Buku</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-white text-gray-800 font-sans antialiased flex h-screen overflow-hidden">
+
+    <!-- SIDEBAR -->
+    <aside class="w-64 flex-shrink-0 border-r border-gray-200 flex flex-col h-full bg-white">
+        <!-- Logo Area -->
+        <div class="h-16 flex items-center px-6 border-b border-gray-100">
+            <!-- Icon Buku (Logo) -->
+            <svg class="w-6 h-6 text-purple-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253">
+                </path>
+            </svg>
+            <span class="text-lg font-bold text-purple-600 tracking-wide">PERPUSTAKAAN</span>
+        </div>
+
+        <!-- Navigasi Menu -->
+        <nav class="flex-1 px-4 space-y-1 mt-6 overflow-y-auto">
+            <a href="dashboard.html"
+                class="flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-gray-600 rounded-lg hover:bg-gray-50 transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z">
+                    </path>
+                </svg>
+                Dashboard
+            </a>
+
+            <!-- Menu Aktif (Warna Ungu) -->
+            <a href="#"
+                class="flex items-center gap-3 px-3 py-2.5 text-sm font-medium bg-purple-600 text-white rounded-lg transition shadow-sm">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2">
+                    </path>
+                </svg>
+                Perpanjang Buku
+            </a>
+        </nav>
+    </aside>
+
+    <!-- KONTEN UTAMA -->
+    <main class="flex-1 flex flex-col bg-gray-50 h-full overflow-y-auto">
+
+        <!-- Header Atas -->
+        <header class="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-8">
+            <h1 class="text-lg font-bold text-gray-700">Layanan Anggota</h1>
+            <!-- Icon Notifikasi/Lonceng -->
+            <button class="text-gray-500 hover:text-purple-600 transition">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9">
+                    </path>
+                </svg>
+            </button>
+        </header>
+
+        <!-- Area Form -->
+        <div class="p-8">
+
+            <!-- Judul Halaman (Tombol Kembali Dihapus) -->
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">Form Perpanjangan Buku</h2>
+            </div>
+
+            <!-- Kartu Form -->
+            <div class="bg-white border border-gray-300 rounded-xl p-8 shadow-sm">
+
+                <form action="#" method="POST" enctype="multipart/form-data">
+
+                    <!-- Grid Layout untuk Kolom Input -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+
+                        <!-- Kolom Kiri: Data Diri -->
+                        <div class="space-y-5">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-800 mb-1.5">Nama Lengkap</label>
+                                <input type="text" placeholder="Contoh: Budi Santoso"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-purple-500 focus:border-purple-500 outline-none text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-800 mb-1.5">User ID</label>
+                                <input type="text" placeholder="Contoh: PKP-2026-001"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-purple-500 focus:border-purple-500 outline-none text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-800 mb-1.5">Nomor HP</label>
+                                <input type="tel" placeholder="08xxxxxxxxxx"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-purple-500 focus:border-purple-500 outline-none text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-800 mb-1.5">Email</label>
+                                <input type="email" placeholder="email@contoh.com"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-purple-500 focus:border-purple-500 outline-none text-sm">
+                            </div>
+                        </div>
+
+                        <!-- Kolom Kanan: Data Buku -->
+                        <div class="space-y-5">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-800 mb-1.5">ID Buku</label>
+                                <input type="text" placeholder="Contoh: BK-1092"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-purple-500 focus:border-purple-500 outline-none text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-800 mb-1.5">Judul Buku</label>
+                                <input type="text" placeholder="Masukkan judul buku..."
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-purple-500 focus:border-purple-500 outline-none text-sm">
+                            </div>
+
+                            <!-- Input File Gambar -->
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-800 mb-1.5">Upload Gambar
+                                    Buku</label>
+                                <div
+                                    class="border border-gray-300 rounded-lg overflow-hidden flex items-center bg-white">
+                                    <input type="file" id="gambarBuku" accept="image/*"
+                                        class="w-full text-sm text-gray-600 file:mr-4 file:py-2.5 file:px-4 file:border-0 file:border-r file:border-gray-300 file:bg-gray-50 file:text-gray-700 file:font-semibold hover:file:bg-gray-100 cursor-pointer transition">
+                                </div>
+                                <!-- Tempat Preview Gambar -->
+                                <div id="previewArea" class="mt-3 hidden">
+                                    <img id="imgPreview" src="" alt="Preview"
+                                        class="h-24 w-auto rounded border border-gray-200 object-cover">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Tombol Aksi Bawah -->
+                    <div class="flex justify-end gap-3 mt-10 pt-6 border-t border-gray-200">
+                        <button type="button"
+                            class="px-6 py-2 border border-gray-300 rounded-md text-gray-700 font-medium text-sm hover:bg-gray-50 transition">
+                            Batal
+                        </button>
+                        <button type="submit"
+                            class="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-md font-medium text-sm shadow-sm transition">
+                            Ajukan Perpanjangan
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Script sederhana untuk preview gambar -->
+    <script>
+        const inputGambar = document.getElementById('gambarBuku');
+        const areaPreview = document.getElementById('previewArea');
+        const imgPreview = document.getElementById('imgPreview');
+
+        inputGambar.addEventListener('change', function () {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    imgPreview.src = e.target.result;
+                    areaPreview.classList.remove('hidden');
+                }
+                reader.readAsDataURL(file);
+            } else {
+                areaPreview.classList.add('hidden');
+                imgPreview.src = '';
+            }
+        });
+    </script>
+</body>
+
+</html>
