@@ -2,22 +2,22 @@
     "version": 2,
     "builds": [
         {
-            "src": "public/index.php",
+            "src": "api/index.php",
             "use": "vercel-php@0.6.2"
         },
         {
-            "src": "public/(css|js|images)/(.*)",
+            "src": "public/(build|assets|css|js|images)/(.*)",
             "use": "@vercel/static"
         }
     ],
     "routes": [
         {
-            "src": "/(css|js|images)/(.*)",
+            "src": "/(build|assets|css|js|images)/(.*)",
             "dest": "public/$1/$2"
         },
         {
             "src": "/(.*)",
-            "dest": "public/index.php"
+            "dest": "api/index.php"
         }
     ]
 }
