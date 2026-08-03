@@ -11,8 +11,9 @@
     theme: {
       extend: {
         colors: {
-          oren: '#FFA500', // Kamu bisa beri nama apa saja, misal 'brand' atau 'perpus'
-          birulaut: '#076cb5ff',
+          TUA: '#162E93',
+          biru: '#012269',
+          ijo: '#218028',
         }
       }
     }
