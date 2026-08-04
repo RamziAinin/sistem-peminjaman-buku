@@ -27,19 +27,19 @@
     <!-- SIDEBAR ADMIN -->
     <aside class="w-64 flex-shrink-0 border-r border-gray-200 flex flex-col h-full bg-white shadow-sm z-10">
         <!-- Logo Area -->
-        <div class="h-16 flex items-center px-6 border-b border-gray-100 bg-purple-50">
-            <svg class="w-6 h-6 text-purple-700 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="h-16 flex items-center px-6 border-b border-gray-100 bg-blue-50">
+            <svg class="w-6 h-6 text-TUA mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z">
                 </path>
             </svg>
-            <span class="text-lg font-bold text-purple-800 tracking-wide">ADMIN PERPUS</span>
+            <span class="text-lg font-bold text-TUA tracking-wide">ADMIN PERPUS</span>
         </div>
 
         <nav class="flex-1 px-4 space-y-2 mt-6 overflow-y-auto">
             <!-- Menu Dashboard -->
             <a href="{{ route('admin.dashboard') }}"
-                class="flex items-center gap-3 px-3 py-2.5 text-sm font-medium {{ request()->routeIs('admin.dashboard') ? 'bg-purple-700 text-white shadow-sm' : 'text-gray-600 hover:bg-purple-50 hover:text-purple-700' }} rounded-lg transition">
+                class="flex items-center gap-3 px-3 py-2.5 text-sm font-medium {{ request()->routeIs('admin.dashboard') ? 'bg-TUA text-white shadow-sm' : 'text-gray-600 hover:bg-blue-50 hover:text-biru' }} rounded-lg transition">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z">
@@ -50,7 +50,7 @@
 
             <!-- Menu Validasi -->
             <a href="{{ route('admin.validasi') }}"
-                class="flex items-center justify-between px-3 py-2.5 text-sm font-medium {{ request()->routeIs('admin.validasi') ? 'bg-purple-600 text-white shadow-sm' : 'text-gray-600 hover:bg-purple-50 hover:text-purple-700' }} rounded-lg transition">
+                class="flex items-center justify-between px-3 py-2.5 text-sm font-medium {{ request()->routeIs('admin.validasi') ? 'bg-TUA text-white shadow-sm' : 'text-gray-600 hover:bg-blue-50 hover:text-biru' }} rounded-lg transition">
                 <div class="flex items-center gap-3">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -66,13 +66,13 @@
                 @endphp
                 
                 @if($pendingCount > 0)
-                    <span class="{{ request()->routeIs('admin.validasi') ? 'bg-white text-purple-600' : 'bg-red-500 text-white' }} text-xs font-bold px-2 py-0.5 rounded-full">
+                    <span class="{{ request()->routeIs('admin.validasi') ? 'bg-white text-TUA' : 'bg-red-500 text-white' }} text-xs font-bold px-2 py-0.5 rounded-full">
                         {{ $pendingCount }}
                     </span>
                 @endif
             </a>
             <a href="{{ route('admin.upload') }}"
-                class="flex items-center gap-3 px-3 py-2.5 text-sm font-medium {{ request()->routeIs('admin.upload') ? 'bg-purple-600 text-white shadow-sm' : 'text-gray-600 hover:bg-purple-50 hover:text-purple-700' }} rounded-lg transition">
+                class="flex items-center gap-3 px-3 py-2.5 text-sm font-medium {{ request()->routeIs('admin.upload') ? 'bg-TUA text-white shadow-sm' : 'text-gray-600 hover:bg-blue-50 hover:text-biru' }} rounded-lg transition">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
@@ -110,7 +110,7 @@
                     <p class="text-xs text-gray-500">{{ Auth::user()->email ?? 'admin@perpuspekalongan.go.id' }}</p>
                 </div>
                 <div
-                    class="w-10 h-10 bg-purple-200 rounded-full flex items-center justify-center text-purple-700 font-bold border-2 border-purple-600 uppercase">
+                    class="w-10 h-10 bg-blue-200 rounded-full flex items-center justify-center text-TUA font-bold border-2 border-TUA uppercase">
                     {{ substr(Auth::user()->name ?? 'A', 0, 1) }}
                 </div>
             </div>

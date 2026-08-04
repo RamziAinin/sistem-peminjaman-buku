@@ -22,8 +22,8 @@
         <!-- Search Box (Form Valid) -->
         <form action="{{ route('admin.validasi') }}" method="GET" class="relative w-full md:w-64">
             <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama atau ID Buku..."
-                class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-sm">
-            <button type="submit" class="absolute left-3 top-2.5 text-gray-400 hover:text-purple-600">
+                class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent text-sm">
+            <button type="submit" class="absolute left-3 top-2.5 text-gray-400 hover:text-blue-600">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                 </svg>
@@ -33,7 +33,7 @@
 
     <!-- Filter Tabs -->
     <div class="flex space-x-1 border-b border-gray-200 mb-6">
-        <button class="px-4 py-2 text-sm font-medium text-purple-600 border-b-2 border-purple-600 bg-purple-50 rounded-t-lg">
+        <button class="px-4 py-2 text-sm font-medium text-blue-600 border-b-2 border-blue-600 bg-blue-50 rounded-t-lg">
             Menunggu Validasi ({{ $jumlahPending }})
         </button>
     </div>
@@ -61,13 +61,13 @@
                             </td>
                             <td class="py-4 px-6">
                                 <!-- Link ke halaman detail sudah diaktifkan -->
-                                <a href="{{ route('admin.validasi.detail', $item->id) }}" class="font-bold text-gray-800 hover:text-purple-600 hover:underline transition">
+                                <a href="{{ route('admin.validasi.detail', $item->id) }}" class="font-bold text-gray-800 hover:text-blue-600 hover:underline transition">
                                     {{ $item->nama }}
                                 </a>
                                 <span class="block text-xs text-gray-500">Nomor Kartu Anggota: {{ $item->nomor_anggota }}</span>
                             </td>
                             <td class="py-4 px-6">
-                                <span class="font-medium text-purple-700">{{ $item->judul_buku }}</span>
+                                <span class="font-medium text-blue-700">{{ $item->judul_buku }}</span>
                                 <span class="block mt-1 bg-yellow-100 text-yellow-800 text-xs px-2 py-0.5 rounded font-medium w-max">
                                     Batas: {{ \Carbon\Carbon::parse($item->tanggal_kembali)->format('d M Y') }}
                                 </span>

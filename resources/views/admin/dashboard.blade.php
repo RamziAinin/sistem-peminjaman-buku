@@ -9,8 +9,8 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
 
         <!-- Card 1: Request Perpanjangan -->
-        <div class="bg-white p-6 rounded-xl border border-purple-200 shadow-sm flex items-center gap-4 ring-1 ring-purple-100">
-            <div class="w-12 h-12 bg-purple-100 text-purple-600 rounded-lg flex items-center justify-center">
+        <div class="bg-white p-6 rounded-xl border border-blue-200 shadow-sm flex items-center gap-4 ring-1 ring-blue-200">
+            <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2">
@@ -18,8 +18,8 @@
                 </svg>
             </div>
             <div>
-                <p class="text-sm text-gray-500 font-medium">Request Perpanjangan</p>
-                <p class="text-2xl font-bold text-purple-700">
+                <p class="text-sm text-blue-500 font-medium">Request Perpanjangan</p>
+                <p class="text-2xl font-bold text-blue-600">
                     {{ $requestPerpanjangan ?? 0 }} 
                     <span class="text-sm text-gray-400 font-normal">Menunggu</span>
                 </p>
@@ -27,7 +27,7 @@
         </div>
 
         <!-- Card 2: Buku Terlambat -->
-        <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex items-center gap-4">
+        <div class="bg-white p-6 rounded-xl border border-red-200 shadow-sm flex items-center gap-4 ring-1 ring-red-200">
             <div class="w-12 h-12 bg-red-100 text-red-600 rounded-lg flex items-center justify-center">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -35,7 +35,7 @@
                 </svg>
             </div>
             <div>
-                <p class="text-sm text-gray-500 font-medium">Buku Terlambat</p>
+                <p class="text-sm text-red-400 font-medium">Buku Terlambat</p>
                 <p class="text-2xl font-bold text-red-600">
                     {{ $bukuTerlambat ?? 0 }}
                 </p>
@@ -49,7 +49,7 @@
         <div class="px-6 py-4 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
             <h3 class="text-lg font-bold text-gray-800">Riwayat Validasi Perpanjangan</h3>
             <!-- Link ke halaman riwayat full (nanti bisa dibuat rutenya) -->
-            <a href="{{ route('admin.riwayat') }}" class="text-sm text-purple-600 hover:text-purple-800 font-medium">Lihat Semua &rarr;</a>
+            <a href="{{ route('admin.riwayat') }}" class="text-sm text-blue-600 hover:text-blue-600 font-medium">Lihat Semua &rarr;</a>
         </div>
 
         <div class="overflow-x-auto">

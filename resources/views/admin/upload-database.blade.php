@@ -47,12 +47,12 @@
                 @csrf
 
                 <!-- Drag and Drop Box -->
-                <div class="border-2 border-dashed border-gray-300 hover:border-purple-500 rounded-2xl p-12 text-center flex flex-col items-center justify-center bg-gray-50 hover:bg-gray-100 transition cursor-pointer relative group">
+                <div class="border-2 border-dashed border-gray-300 hover:border-blue-500 rounded-2xl p-12 text-center flex flex-col items-center justify-center bg-gray-50 hover:bg-gray-100 transition cursor-pointer relative group">
                     <!-- Input File (Wajib disembunyikan tapi bisa diklik) -->
                     <input type="file" name="file_database" accept=".xlsx, .xls, .csv" required
                         class="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10" id="file-upload" onchange="showFileName()">
                     
-                    <div class="w-16 h-16 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center mb-4 shadow-sm group-hover:scale-110 transition transform duration-200">
+                    <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-4 shadow-sm group-hover:scale-110 transition transform duration-200">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12">
@@ -61,7 +61,7 @@
                     </div>
                     
                     <p class="text-base font-bold text-gray-700" id="file-name-text">Seret & Letakkan file Excel di sini</p>
-                    <p class="text-sm text-gray-400 mt-1" id="file-instruction">atau <span class="text-purple-600 font-semibold underline">pilih file</span> dari perangkat komputer</p>
+                    <p class="text-sm text-gray-400 mt-1" id="file-instruction">atau <span class="text-blue-600 font-semibold underline">pilih file</span> dari perangkat komputer</p>
                     <p class="text-xs text-gray-400 mt-3">Format yang didukung: .XLSX, .XLS, .CSV (Maks. 10MB)</p>
                 </div>
 
@@ -73,7 +73,7 @@
                     </button>
                     <!-- Tipe tombol harus 'submit' biar datanya terkirim -->
                     <button type="submit"
-                        class="bg-purple-600 hover:bg-purple-700 text-white text-sm font-semibold px-6 py-2.5 rounded-xl transition shadow-sm flex items-center gap-2">
+                        class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-6 py-2.5 rounded-xl transition shadow-sm flex items-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                         </svg>
