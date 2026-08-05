@@ -40,3 +40,15 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/admin/upload-database/proses', [App\Http\Controllers\AdminDashboardController::class, 'processUpload'])->name('admin.upload.process');
     
 }); 
+
+Route::get('/migrasi-db', function () {
+    try {
+        // Memaksa migrasi berjalan tanpa butuh terminal
+        \Illuminate\Support\Facades\Artisan::call('migrate:fresh', [
+            '--force' => true
+        ]);
+        return 'Migrasi ke Supabase SUKSES! 🚀';
+    } catch (\Exception $e) {
+        return 'Yah gagal: ' . $e->getMessage();
+    }
+});
