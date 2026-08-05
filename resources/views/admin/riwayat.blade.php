@@ -49,7 +49,7 @@
     <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
-                <thead>
+                <thead> 
                     <tr class="bg-gray-50 text-gray-600 text-sm border-b border-gray-200 uppercase tracking-wider">
                         <th class="py-4 px-6 font-semibold">Tgl Keputusan</th>
                         <th class="py-4 px-6 font-semibold">Data Peminjam</th>
