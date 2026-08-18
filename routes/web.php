@@ -22,7 +22,7 @@ Route::get('/', function () {
 
 //route user
 Route::get('/pengajuan', [PeminjamanController::class, 'formPengajuan'])->name('user.form');
-Route::post('/pengajuan', [PeminjamanController::class, 'simpanPengajuan'])->name('user.simpan');
+Route::post('/pengajuan', [PeminjamanController::class, 'simpan'])->name('user.simpan');
 // --- ROUTE ADMIN AUTH ---
 Route::get('/admin/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
 Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin.login.submit');
