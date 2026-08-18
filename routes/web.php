@@ -27,10 +27,7 @@ Route::post('/pengajuan', [PeminjamanController::class, 'simpanPengajuan'])->nam
 Route::get('/admin/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
 Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin.login.submit');
 Route::post('/admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
-
-// --- ROUTE DASHBOARD ADMIN (Dilindungi Middleware) ---
 Route::middleware(['auth'])->group(function () {
-    // Ubah baris ini:
     Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/admin/validasi', [App\Http\Controllers\AdminDashboardController::class, 'validasi'])->name('admin.validasi');
     Route::post('/admin/validasi/{id}/update', [App\Http\Controllers\AdminDashboardController::class, 'updateValidasi'])->name('admin.validasi.update');
@@ -38,5 +35,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin/riwayat', [App\Http\Controllers\AdminDashboardController::class, 'riwayat'])->name('admin.riwayat');
     Route::get('/admin/upload-database', [App\Http\Controllers\AdminDashboardController::class, 'uploadDatabase'])->name('admin.upload');
     Route::post('/admin/upload-database/proses', [App\Http\Controllers\AdminDashboardController::class, 'processUpload'])->name('admin.upload.process');
+    // Route untuk nandain buku udah dikembalikan
+    Route::post('/admin/peminjaman/{id}/kembali', [App\Http\Controllers\AdminDashboardController::class, 'tandaiDikembalikan'])->name('admin.kembali');
     
 }); 

@@ -127,7 +127,19 @@ class AdminDashboardController extends Controller
 
         return view('admin.riwayat', compact('riwayat', 'countAll', 'countDisetujui', 'countDitolak', 'filter'));
     }
+    public function tandaiDikembalikan($id)
+    {
+        $peminjaman = Peminjaman::findOrFail($id);
 
+        // KUNCI SAKTINYA DI SINI:
+        // Kita ubah semua riwayat buku ini milik user ini yang statusnya 'disetujui' menjadi 'dikembalikan'
+        Peminjaman::where('nomor_anggota', $peminjaman->nomor_anggota)
+                  ->where('id_buku', $peminjaman->id_buku)
+                  ->where('status', 'disetujui')
+                  ->update(['status' => 'dikembalikan']);
+
+        return redirect()->back()->with('success', 'Buku telah ditandai dikembalikan. Kuota perpanjangan berhasil di-reset!');
+    }
     // ==========================================
     // 6. HALAMAN UPLOAD DATABASE
     // ==========================================

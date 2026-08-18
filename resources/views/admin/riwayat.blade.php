@@ -5,6 +5,16 @@
 
 @section('content')
 
+    <!-- ================= ALERT SUKSES ================= -->
+    @if(session('success'))
+    <div class="bg-green-50 border-l-4 border-green-500 p-4 mb-6 rounded-r-lg shadow-sm">
+        <div class="flex items-center">
+            <svg class="w-6 h-6 text-green-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <p class="text-sm md:text-base text-green-700 font-medium">{{ session('success') }}</p>
+        </div>
+    </div>
+    @endif
+
     <!-- Title & Actions Bar -->
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
         <div>
@@ -33,15 +43,20 @@
     <div class="flex space-x-1 border-b border-gray-200 mb-6 overflow-x-auto">
         <a href="{{ route('admin.riwayat', ['search' => request('search')]) }}"
             class="px-4 py-2 text-sm font-medium whitespace-nowrap {{ !request('filter') ? 'text-grey-900 border-b-2 border-purple-600 bg-purple-50' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50' }} rounded-t-lg transition">
-            Semua Riwayat ({{ $countAll }})
+            Semua Riwayat ({{ $countAll ?? 0 }})
         </a>
         <a href="{{ route('admin.riwayat', ['filter' => 'disetujui', 'search' => request('search')]) }}"
             class="px-4 py-2 text-sm font-medium whitespace-nowrap {{ request('filter') == 'disetujui' ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50' }} rounded-t-lg transition">
-            Disetujui ({{ $countDisetujui }})
+            Disetujui ({{ $countDisetujui ?? 0 }})
         </a>
         <a href="{{ route('admin.riwayat', ['filter' => 'ditolak', 'search' => request('search')]) }}"
             class="px-4 py-2 text-sm font-medium whitespace-nowrap {{ request('filter') == 'ditolak' ? 'text-red-600 border-b-2 border-red-600 bg-red-50' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50' }} rounded-t-lg transition">
-            Ditolak ({{ $countDitolak }})
+            Ditolak ({{ $countDitolak ?? 0 }})
+        </a>
+        <!-- Tab Baru: Dikembalikan -->
+        <a href="{{ route('admin.riwayat', ['filter' => 'dikembalikan', 'search' => request('search')]) }}"
+            class="px-4 py-2 text-sm font-medium whitespace-nowrap {{ request('filter') == 'dikembalikan' ? 'text-gray-800 border-b-2 border-gray-800 bg-gray-100' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50' }} rounded-t-lg transition">
+            Dikembalikan ({{ $countDikembalikan ?? 0 }})
         </a>
     </div>
 
@@ -55,7 +70,7 @@
                         <th class="py-4 px-6 font-semibold">Data Peminjam</th>
                         <th class="py-4 px-6 font-semibold">Judul Buku</th>
                         <th class="py-4 px-6 font-semibold">ID Buku</th>
-                        <th class="py-4 px-6 font-semibold text-center">Status Keputusan</th>
+                        <th class="py-4 px-6 font-semibold text-center w-48">Status Keputusan</th>
                     </tr>
                 </thead>
                 <tbody class="text-sm text-gray-700">
@@ -80,16 +95,36 @@
                                 <span class="font-mono bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs border border-gray-200">{{ $item->id_buku }}</span>
                             </td>
                             <td class="py-4 px-6 text-center">
-                                <!-- BADGE STATUS (Bisa diklik menuju detail juga) -->
-                                @if(strtolower($item->status) == 'disetujui')
-                                    <a href="{{ route('admin.validasi.detail', $item->id) }}" class="inline-block bg-green-100 text-green-700 hover:bg-green-200 px-3 py-1 rounded-full text-xs font-semibold transition cursor-pointer">
-                                        Disetujui
-                                    </a>
-                                @else
-                                    <a href="{{ route('admin.validasi.detail', $item->id) }}" class="inline-block bg-red-100 text-red-700 hover:bg-red-200 px-3 py-1 rounded-full text-xs font-semibold transition cursor-pointer">
-                                        Ditolak
-                                    </a>
-                                @endif
+                                
+                                <div class="flex flex-col items-center gap-2">
+                                    <!-- BADGE STATUS -->
+                                    @if(strtolower($item->status) == 'disetujui')
+                                        <a href="{{ route('admin.validasi.detail', $item->id) }}" class="inline-block w-full bg-green-100 text-green-700 hover:bg-green-200 px-3 py-1.5 rounded-full text-xs font-semibold transition cursor-pointer text-center">
+                                            Disetujui
+                                        </a>
+                                        
+                                        <!-- TOMBOL RESET: TANDAI DIKEMBALIKAN (Hanya muncul jika disetujui) -->
+                                        <form action="{{ route('admin.kembali', $item->id) }}" method="POST" class="w-full m-0">
+                                            @csrf
+                                            <button type="submit" 
+                                                    onclick="return confirm('Yakin buku ini sudah dikembalikan secara fisik? Kuota perpanjangan user akan di-reset.')"
+                                                    class="w-full bg-blue-50 text-blue-600 border border-blue-200 px-3 py-1.5 rounded-full text-xs font-semibold hover:bg-blue-600 hover:text-white transition-colors duration-200 flex items-center justify-center gap-1 shadow-sm">
+                                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path></svg>
+                                                Tandai Dikembalikan
+                                            </button>
+                                        </form>
+
+                                    @elseif(strtolower($item->status) == 'dikembalikan')
+                                        <span class="inline-block w-full bg-gray-200 text-gray-700 px-3 py-1.5 rounded-full text-xs font-semibold text-center">
+                                            Buku Dikembalikan
+                                        </span>
+                                    @else
+                                        <a href="{{ route('admin.validasi.detail', $item->id) }}" class="inline-block w-full bg-red-100 text-red-700 hover:bg-red-200 px-3 py-1.5 rounded-full text-xs font-semibold transition cursor-pointer text-center">
+                                            Ditolak
+                                        </a>
+                                    @endif
+                                </div>
+
                             </td>
                         </tr>
                     @empty
