@@ -8,6 +8,10 @@ use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\PeminjamanImport;
 
+// WAJIB DITAMBAHKAN UNTUK FITUR KIRIM EMAIL
+use Illuminate\Support\Facades\Mail;
+use App\Mail\NotifikasiPeminjamanMail;
+
 class AdminDashboardController extends Controller
 {
     // ==========================================
@@ -56,7 +60,7 @@ class AdminDashboardController extends Controller
         if ($search) {
             $pengajuan->appends(['search' => $search]);
         }
-                               
+                                       
         $jumlahPending = Peminjaman::where('status', 'menunggu_verifikasi')->count();
 
         return view('admin.validasi', compact('pengajuan', 'jumlahPending'));
@@ -77,7 +81,7 @@ class AdminDashboardController extends Controller
     }
 
     // ==========================================
-    // 4. EKSEKUSI TOMBOL SETUJU / TOLAK
+    // 4. EKSEKUSI TOMBOL SETUJU / TOLAK & KIRIM EMAIL
     // ==========================================
     public function updateValidasi(Request $request, $id)
     {
@@ -87,7 +91,24 @@ class AdminDashboardController extends Controller
         $peminjaman->status = $request->status; 
         $peminjaman->save();
 
-        return back()->with('success', 'Status pengajuan berhasil diubah menjadi: ' . strtoupper($request->status));
+        // Siapkan data untuk dikirim ke Email
+        $dataMail = [
+            'nama' => $peminjaman->nama,
+            'judul_buku' => $peminjaman->judul_buku,
+            'id_buku' => $peminjaman->id_buku,
+            'status' => $peminjaman->status,
+            'tanggal_kembali' => $peminjaman->tanggal_kembali
+        ];
+
+        // Eksekusi pengiriman email secara otomatis!
+        try {
+            Mail::to($peminjaman->email)->send(new NotifikasiPeminjamanMail($dataMail));
+            $pesanEmail = " dan Email notifikasi telah terkirim!";
+        } catch (\Exception $e) {
+            $pesanEmail = " namun Email gagal terkirim karena masalah server/koneksi.";
+        }
+
+        return back()->with('success', 'Status pengajuan berhasil diubah menjadi: ' . strtoupper($request->status) . $pesanEmail);
     }
 
     // ==========================================
@@ -98,17 +119,19 @@ class AdminDashboardController extends Controller
         $search = $request->input('search');
         $filter = $request->input('filter');
         
-        // TAMBAHKAN 'tidak_terproses' KE DALAM ARRAY STATUS RIWAYAT
-        $statusRiwayat = ['disetujui', 'ditolak', 'tidak_terproses'];
+        // TAMBAHKAN 'dikembalikan' KE DALAM ARRAY STATUS RIWAYAT
+        $statusRiwayat = ['disetujui', 'ditolak', 'tidak_terproses', 'dikembalikan'];
 
         $countAll = Peminjaman::whereIn('status', $statusRiwayat)->count();
         $countDisetujui = Peminjaman::where('status', 'disetujui')->count();
         $countDitolak = Peminjaman::where('status', 'ditolak')->count();
+        // Hitung juga jumlah buku yang sudah dikembalikan untuk ditampilkan di Tab Baru
+        $countDikembalikan = Peminjaman::where('status', 'dikembalikan')->count();
 
         $query = Peminjaman::whereIn('status', $statusRiwayat);
 
-        // Jika salah satu Tab (Disetujui / Ditolak) diklik
-        if ($filter && in_array($filter, ['disetujui', 'ditolak'])) {
+        // Jika salah satu Tab diklik (termasuk tab dikembalikan)
+        if ($filter && in_array($filter, ['disetujui', 'ditolak', 'dikembalikan'])) {
             $query->where('status', $filter);
         }
 
@@ -125,13 +148,14 @@ class AdminDashboardController extends Controller
         $riwayat = $query->orderBy('updated_at', 'desc')->paginate(10);
         $riwayat->appends(['search' => $search, 'filter' => $filter]);
 
-        return view('admin.riwayat', compact('riwayat', 'countAll', 'countDisetujui', 'countDitolak', 'filter'));
+        // Kirim variabel $countDikembalikan ke View agar angka di tab muncul
+        return view('admin.riwayat', compact('riwayat', 'countAll', 'countDisetujui', 'countDitolak', 'countDikembalikan', 'filter'));
     }
+
     public function tandaiDikembalikan($id)
     {
         $peminjaman = Peminjaman::findOrFail($id);
 
-        // KUNCI SAKTINYA DI SINI:
         // Kita ubah semua riwayat buku ini milik user ini yang statusnya 'disetujui' menjadi 'dikembalikan'
         Peminjaman::where('nomor_anggota', $peminjaman->nomor_anggota)
                   ->where('id_buku', $peminjaman->id_buku)
@@ -140,6 +164,7 @@ class AdminDashboardController extends Controller
 
         return redirect()->back()->with('success', 'Buku telah ditandai dikembalikan. Kuota perpanjangan berhasil di-reset!');
     }
+
     // ==========================================
     // 6. HALAMAN UPLOAD DATABASE
     // ==========================================
@@ -153,7 +178,6 @@ class AdminDashboardController extends Controller
     // ==========================================
     public function processUpload(Request $request)
     {
-        // Validasi HANYA file (kategori sudah dihapus)
         $request->validate([
             'file_database' => 'required|file|mimes:csv,txt,xls,xlsx|max:10240', 
         ], [
@@ -165,11 +189,8 @@ class AdminDashboardController extends Controller
         $file = $request->file('file_database');
 
         try {
-            // Eksekusi package Laravel-Excel
             Excel::import(new \App\Imports\PeminjamanImport, $file);
-            
             return back()->with('success', 'Berhasil! Data dari file ' . $file->getClientOriginalName() . ' telah masuk ke antrean validasi.');
-            
         } catch (\Exception $e) {
             return back()->withErrors(['file_database' => 'Gagal membaca isi file. Pastikan format kolom sesuai dengan template SIPOKU. (Detail: ' . $e->getMessage() . ')']);
         }
