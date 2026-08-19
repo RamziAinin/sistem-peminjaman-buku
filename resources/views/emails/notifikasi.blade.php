@@ -39,7 +39,7 @@
                 </p>
             @else
                 <p style="margin: 0; color: #dc2626; font-size: 14px; background: #fee2e2; padding: 10px; border-radius: 6px;">
-                    <strong>Penting:</strong> Mohon segera kembalikan fisik buku ke perpustakaan maksimal pada batas waktu awal Anda untuk menghindari sanksi/denda.
+                    <strong>Penting:</strong> Mohon segera kembalikan fisik buku ke perpustakaan maksimal pada batas waktu awal Anda untuk menghindari skorsing.
                 </p>
             @endif
         </div>
