@@ -86,10 +86,33 @@
                 <div class="bg-gray-50 border-b border-gray-100 px-4 py-3">
                     <h3 class="text-sm font-bold text-gray-700">Foto Bukti / Sampul</h3>
                 </div>
-                <div class="p-4 flex justify-center bg-gray-50">
-                    <!-- Gunakan storage_path jika pakai symlink, atau asset jika langsung di public -->
-                    <img src="{{ asset('storage/' . $pengajuan->foto) }}" alt="Foto Buku" class="w-full h-auto rounded-lg border border-gray-200 object-cover shadow-sm max-h-80"
-                         onerror="this.onerror=null;this.src='https://via.placeholder.com/400x500?text=Foto+Tidak+Ditemukan';">
+                
+                <!-- PERBAIKAN LOGIKA FOTO SUPABASE DI SINI -->
+                <div class="p-4 flex justify-center bg-gray-50 relative group">
+                    @if($pengajuan->foto)
+                        @php
+                            // Cek apakah url foto diawali dengan http (dari Supabase) atau dari storage lokal lama
+                            $fotoUrl = str_starts_with($pengajuan->foto, 'http') 
+                                    ? $pengajuan->foto 
+                                    : asset('storage/' . $pengajuan->foto);
+                        @endphp
+                        
+                        <img src="{{ $fotoUrl }}" alt="Foto Buku" class="w-full h-auto rounded-lg border border-gray-200 object-cover shadow-sm max-h-80"
+                             onerror="this.onerror=null;this.src='https://via.placeholder.com/400x500?text=Gambar+Rusak+Atau+Hilang';">
+                        
+                        <!-- Overlay klik untuk buka di tab baru -->
+                        <a href="{{ $fotoUrl }}" target="_blank" class="absolute inset-0 m-4 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all duration-300 rounded-lg flex items-center justify-center">
+                            <span class="opacity-0 group-hover:opacity-100 text-white font-medium flex items-center gap-2 bg-black bg-opacity-50 px-3 py-1.5 rounded-lg text-sm">
+                                Buka Penuh
+                            </span>
+                        </a>
+                    @else
+                        <!-- Jika dari awal memang tidak upload foto -->
+                        <div class="text-center p-8 border-2 border-dashed border-gray-200 rounded-lg w-full">
+                            <svg class="mx-auto h-10 w-10 text-gray-300 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                            <p class="text-xs text-gray-500 font-medium">Tidak ada foto<br>yang dilampirkan.</p>
+                        </div>
+                    @endif
                 </div>
             </div>
 
