@@ -97,5 +97,17 @@ class PeminjamanController extends Controller
         $pesanSukses = "Permohonan perpanjangan waktu sudah diajukan dan akan diverifikasi maksimal 1x24 jam. Konfirmasi akan dikirimkan ke email: {$request->email}";
 
         return redirect()->back()->with('success', $pesanSukses);
+
+        // ==========================================
+        // 3. PROSES UPLOAD FOTO KE SUPABASE
+        // ==========================================
+        $pathFoto = null;
+        if ($request->hasFile('foto')) {
+            // Upload ke Supabase via protokol S3
+            $path = $request->file('foto')->store('foto_buku', 's3');
+            
+            // Otomatis bikin URL full berdasarkan AWS_URL di .env
+            $pathFoto = Storage::disk('s3')->url($path);
+        }
     }
 }
