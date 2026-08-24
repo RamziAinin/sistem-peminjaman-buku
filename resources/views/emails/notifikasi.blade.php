@@ -38,6 +38,12 @@
                     </span>
                 </p>
             @else
+                <!-- TAMBAHAN ALASAN PENOLAKAN DI SINI -->
+                <p style="margin: 0 0 15px 0; color: #374151; font-size: 15px;">
+                    <strong>Alasan Penolakan:</strong><br>
+                    <span style="color: #dc2626; font-style: italic;">"{{ $dataMail['alasan_penolakan'] ?? 'Tidak ada alasan spesifik yang diberikan.' }}"</span>
+                </p>
+
                 <p style="margin: 0; color: #dc2626; font-size: 14px; background: #fee2e2; padding: 10px; border-radius: 6px;">
                     <strong>Penting:</strong> Mohon segera kembalikan fisik buku ke perpustakaan maksimal pada batas waktu awal Anda untuk menghindari skorsing.
                 </p>

@@ -87,17 +87,30 @@ class AdminDashboardController extends Controller
     {
         $peminjaman = Peminjaman::findOrFail($id);
         
+        // Jika statusnya ditolak, pastikan admin mengisi alasannya
+        if ($request->status == 'ditolak') {
+            $request->validate([
+                'alasan_penolakan' => 'required|string'
+            ], [
+                'alasan_penolakan.required' => 'Alasan penolakan WAJIB diisi sebelum menolak pengajuan.'
+            ]);
+            
+            // Simpan alasannya ke database
+            $peminjaman->alasan_penolakan = $request->alasan_penolakan;
+        }
+
         // Update status sesuai form input hidden (disetujui / ditolak)
         $peminjaman->status = $request->status; 
         $peminjaman->save();
 
-        // Siapkan data untuk dikirim ke Email
+        // Siapkan data untuk dikirim ke Email (TERMASUK ALASANNYA)
         $dataMail = [
             'nama' => $peminjaman->nama,
             'judul_buku' => $peminjaman->judul_buku,
             'id_buku' => $peminjaman->id_buku,
             'status' => $peminjaman->status,
-            'tanggal_kembali' => $peminjaman->tanggal_kembali
+            'tanggal_kembali' => $peminjaman->tanggal_kembali,
+            'alasan_penolakan' => $peminjaman->alasan_penolakan ?? null // <-- Masukin ke tukang pos
         ];
 
         // Eksekusi pengiriman email secara otomatis!

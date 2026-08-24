@@ -11,6 +11,17 @@
             <span class="block sm:inline">{{ session('success') }}</span>
         </div>
     @endif
+    
+    <!-- Alert Error (Kalau admin memotong javascript dan form kosong tersubmit) -->
+    @if($errors->any())
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+            <ul class="list-disc pl-5">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
     <!-- Title & Actions Bar -->
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
@@ -88,11 +99,14 @@
                                         </button>
                                     </form>
 
-                                    <!-- Tombol TOLAK -->
-                                    <form action="{{ route('admin.validasi.update', $item->id) }}" method="POST">
+                                    <!-- Tombol TOLAK DENGAN JS PROMPT -->
+                                    <form id="form-tolak-{{ $item->id }}" action="{{ route('admin.validasi.update', $item->id) }}" method="POST">
                                         @csrf
                                         <input type="hidden" name="status" value="ditolak">
-                                        <button type="submit" onclick="return confirm('Yakin ingin menolak pengajuan dari {{ $item->nama }}?')" class="bg-red-500 text-white hover:bg-red-600 px-4 py-2 rounded-lg font-medium transition shadow-sm flex items-center gap-1">
+                                        <!-- Input hidden untuk menampung alasan penolakan dari Javascript -->
+                                        <input type="hidden" name="alasan_penolakan" id="alasan-tolak-{{ $item->id }}" value="">
+                                        
+                                        <button type="button" onclick="tolakPengajuan({{ $item->id }}, '{{ addslashes($item->nama) }}')" class="bg-red-500 text-white hover:bg-red-600 px-4 py-2 rounded-lg font-medium transition shadow-sm flex items-center gap-1">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                                             Tolak
                                         </button>
@@ -122,5 +136,27 @@
             {{ $pengajuan->links() }}
         </div>
     </div>
+
+    <!-- SCRIPT JAVASCRIPT UNTUK POP-UP ALASAN PENOLAKAN -->
+    <script>
+        function tolakPengajuan(id, namaPemohon) {
+            // Tampilkan pop-up input ke layar admin
+            let alasan = prompt('PENTING: Masukkan ALASAN PENOLAKAN untuk pengajuan ' + namaPemohon + '.\nAlasan ini akan dikirim otomatis ke email pemohon:');
+            
+            // Cek apakah admin ngisi alasannya atau nge-cancel
+            if (alasan === null) {
+                // Admin klik 'Cancel'
+                return false;
+            } else if (alasan.trim() === '') {
+                // Admin klik 'OK' tapi formnya kosong
+                alert('Gagal! Alasan penolakan tidak boleh kosong.');
+                return false;
+            } else {
+                // Jika alasan sudah diisi, masukkan ke input hidden lalu submit form-nya
+                document.getElementById('alasan-tolak-' + id).value = alasan;
+                document.getElementById('form-tolak-' + id).submit();
+            }
+        }
+    </script>
 
 @endsection
