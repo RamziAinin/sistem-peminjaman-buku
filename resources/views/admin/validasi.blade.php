@@ -12,7 +12,7 @@
         </div>
     @endif
     
-    <!-- Alert Error (Kalau admin memotong javascript dan form kosong tersubmit) -->
+    <!-- Alert Error -->
     @if($errors->any())
         <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
             <ul class="list-disc pl-5">
@@ -30,7 +30,7 @@
             <p class="text-sm text-gray-500 mt-1">Kelola permohonan perpanjangan waktu pinjam buku dari anggota.</p>
         </div>
 
-        <!-- Search Box (Form Valid) -->
+        <!-- Search Box -->
         <form action="{{ route('admin.validasi') }}" method="GET" class="relative w-full md:w-64">
             <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama atau ID Buku..."
                 class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent text-sm">
@@ -71,11 +71,10 @@
                                 <span class="block text-xs text-gray-500">{{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }} WIB</span>
                             </td>
                             <td class="py-4 px-6">
-                                <!-- Link ke halaman detail sudah diaktifkan -->
                                 <a href="{{ route('admin.validasi.detail', $item->id) }}" class="font-bold text-gray-800 hover:text-blue-600 hover:underline transition">
                                     {{ $item->nama }}
                                 </a>
-                                <span class="block text-xs text-gray-500">Nomor Kartu Anggota: {{ $item->nomor_anggota }}</span>
+                                <span class="block text-xs text-gray-500">Nomor Anggota: {{ $item->nomor_anggota }}</span>
                             </td>
                             <td class="py-4 px-6">
                                 <span class="font-medium text-blue-700">{{ $item->judul_buku }}</span>
@@ -93,20 +92,19 @@
                                     <form action="{{ route('admin.validasi.update', $item->id) }}" method="POST">
                                         @csrf
                                         <input type="hidden" name="status" value="disetujui">
-                                        <button type="submit" onclick="return confirm('Yakin ingin menyetujui pengajuan dari {{ $item->nama }}?')" class="bg-green-500 text-white hover:bg-green-600 px-4 py-2 rounded-lg font-medium transition shadow-sm flex items-center gap-1">
+                                        <button type="submit" onclick="return confirm('Yakin ingin menyetujui pengajuan dari {{ $item->nama }}?')" class="bg-green-500 text-white hover:bg-green-600 px-3 py-2 rounded-lg font-medium transition shadow-sm flex items-center gap-1 text-xs md:text-sm">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                                             Setuju
                                         </button>
                                     </form>
 
-                                    <!-- Tombol TOLAK DENGAN JS PROMPT -->
+                                    <!-- Tombol TOLAK (Memicu Custom Modal) -->
                                     <form id="form-tolak-{{ $item->id }}" action="{{ route('admin.validasi.update', $item->id) }}" method="POST">
                                         @csrf
                                         <input type="hidden" name="status" value="ditolak">
-                                        <!-- Input hidden untuk menampung alasan penolakan dari Javascript -->
                                         <input type="hidden" name="alasan_penolakan" id="alasan-tolak-{{ $item->id }}" value="">
                                         
-                                        <button type="button" onclick="tolakPengajuan({{ $item->id }}, '{{ addslashes($item->nama) }}')" class="bg-red-500 text-white hover:bg-red-600 px-4 py-2 rounded-lg font-medium transition shadow-sm flex items-center gap-1">
+                                        <button type="button" onclick="openModalTolak({{ $item->id }}, '{{ addslashes($item->nama) }}')" class="bg-red-500 text-white hover:bg-red-600 px-3 py-2 rounded-lg font-medium transition shadow-sm flex items-center gap-1 text-xs md:text-sm">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                                             Tolak
                                         </button>
@@ -131,31 +129,91 @@
             </table>
         </div>
 
-        <!-- Pagination Laravel -->
+        <!-- Pagination -->
         <div class="px-6 py-4 border-t border-gray-200 bg-gray-50">
             {{ $pengajuan->links() }}
         </div>
     </div>
 
-    <!-- SCRIPT JAVASCRIPT UNTUK POP-UP ALASAN PENOLAKAN -->
-    <script>
-        function tolakPengajuan(id, namaPemohon) {
-            // Tampilkan pop-up input ke layar admin
-            let alasan = prompt('PENTING: Masukkan ALASAN PENOLAKAN untuk pengajuan ' + namaPemohon + '.\nAlasan ini akan dikirim otomatis ke email pemohon:');
+
+    <!-- ========================================== -->
+    <!-- CUSTOM MODAL POP-UP ALASAN PENOLAKAN       -->
+    <!-- ========================================== -->
+    <div id="modal-tolak" class="fixed inset-0 z-50 flex items-center justify-center hidden">
+        <!-- Latar Belakang Gelap -->
+        <div class="absolute inset-0 bg-gray-900 bg-opacity-60 transition-opacity" onclick="closeModalTolak()"></div>
+        
+        <!-- Kotak Modal -->
+        <div class="relative bg-white rounded-2xl shadow-xl w-full max-w-md mx-4 overflow-hidden transform transition-all">
             
-            // Cek apakah admin ngisi alasannya atau nge-cancel
-            if (alasan === null) {
-                // Admin klik 'Cancel'
-                return false;
-            } else if (alasan.trim() === '') {
-                // Admin klik 'OK' tapi formnya kosong
-                alert('Gagal! Alasan penolakan tidak boleh kosong.');
-                return false;
-            } else {
-                // Jika alasan sudah diisi, masukkan ke input hidden lalu submit form-nya
-                document.getElementById('alasan-tolak-' + id).value = alasan;
-                document.getElementById('form-tolak-' + id).submit();
+            <!-- Header Modal -->
+            <div class="bg-red-50 px-6 py-4 border-b border-red-100 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="bg-red-100 p-2 rounded-full text-red-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                    </div>
+                    <h3 class="text-lg font-bold text-red-700">Tolak Pengajuan</h3>
+                </div>
+                <button onclick="closeModalTolak()" class="text-gray-400 hover:text-gray-600 transition">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+
+            <!-- Body Modal -->
+            <div class="p-6">
+                <p class="text-sm text-gray-600 mb-4">Anda akan menolak pengajuan perpanjangan buku dari <strong id="modal-nama" class="text-gray-800"></strong>. Alasan ini akan dikirimkan otomatis ke email peminjam.</p>
+                
+                <label for="modal-input-alasan" class="block text-sm font-bold text-gray-700 mb-2">Alasan Penolakan <span class="text-red-500">*</span></label>
+                <textarea id="modal-input-alasan" rows="3" placeholder="Contoh: Foto buku buram / Buku sudah dibooking..." class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent text-sm resize-none"></textarea>
+                <p id="modal-error-teks" class="text-red-500 text-xs mt-2 hidden">Alasan penolakan tidak boleh kosong!</p>
+            </div>
+
+            <!-- Footer Modal -->
+            <div class="bg-gray-50 px-6 py-4 border-t border-gray-100 flex justify-end gap-3">
+                <button onclick="closeModalTolak()" class="px-5 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 transition">
+                    Batal
+                </button>
+                <button onclick="submitTolak()" class="px-5 py-2.5 text-sm font-bold text-white bg-red-600 rounded-xl hover:bg-red-700 shadow-sm transition flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    Kirim Penolakan
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- SCRIPT LOGIKA MODAL -->
+    <script>
+        let currentPengajuanId = null;
+
+        function openModalTolak(id, nama) {
+            currentPengajuanId = id;
+            document.getElementById('modal-nama').innerText = nama;
+            document.getElementById('modal-input-alasan').value = ''; // Reset inputan
+            document.getElementById('modal-error-teks').classList.add('hidden'); // Sembunyikan error
+            
+            // Tampilkan modal
+            document.getElementById('modal-tolak').classList.remove('hidden');
+        }
+
+        function closeModalTolak() {
+            currentPengajuanId = null;
+            document.getElementById('modal-tolak').classList.add('hidden');
+        }
+
+        function submitTolak() {
+            let alasan = document.getElementById('modal-input-alasan').value;
+            
+            // Validasi jika kosong
+            if (alasan.trim() === '') {
+                document.getElementById('modal-error-teks').classList.remove('hidden');
+                document.getElementById('modal-input-alasan').focus();
+                return;
             }
+
+            // Pindahkan isi alasan ke form yang ada di tabel, lalu submit
+            document.getElementById('alasan-tolak-' + currentPengajuanId).value = alasan;
+            document.getElementById('form-tolak-' + currentPengajuanId).submit();
         }
     </script>
 
