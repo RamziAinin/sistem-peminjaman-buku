@@ -12,7 +12,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        // $schedule->command('inspire')->hourly();
+        // JADWALKAN ROBOT PENGINGAT H-1 DI SINI
+        $schedule->command('perpus:pengingat-h1')->dailyAt('07:00');
     }
 
     /**

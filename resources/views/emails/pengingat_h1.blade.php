@@ -20,7 +20,7 @@
         </div>
 
         <p style="color: #dc2626; font-size: 14px; font-weight: bold;">
-            Mohon segera kembalikan buku fisik ke perpustakaan untuk menghindari sanksi / denda keterlambatan.
+            Mohon segera kembalikan buku fisik ke perpustakaan untuk menghindari sanksi keterlambatan.
         </p>
     </div>
 </body>
