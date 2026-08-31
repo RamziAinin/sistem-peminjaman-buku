@@ -7,6 +7,7 @@ use App\Models\Peminjaman;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\PeminjamanImport;
+use App\Models\Pengaturan;
 
 // WAJIB DITAMBAHKAN UNTUK FITUR KIRIM EMAIL
 use Illuminate\Support\Facades\Mail;
@@ -207,5 +208,39 @@ class AdminDashboardController extends Controller
         } catch (\Exception $e) {
             return back()->withErrors(['file_database' => 'Gagal membaca isi file. Pastikan format kolom sesuai dengan template SIPOKU. (Detail: ' . $e->getMessage() . ')']);
         }
+    }
+    // ==========================================
+    // 8. HALAMAN PENGATURAN SISTEM
+    // ==========================================
+    public function pengaturan()
+    {
+        // Ambil SEMUA data pustakawan
+        $daftarPustakawan = Pengaturan::orderBy('created_at', 'desc')->get();
+        return view('admin.pengaturan', compact('daftarPustakawan'));
+    }
+
+    public function tambahPengaturan(Request $request)
+    {
+        $request->validate([
+            'nama' => 'required|string|max:255',
+            'email_pustakawan' => 'required|email|unique:pengaturans,email_pustakawan'
+        ], [
+            'email_pustakawan.unique' => 'Gagal! Email ini sudah terdaftar di sistem.'
+        ]);
+
+        Pengaturan::create([
+            'nama' => $request->nama,
+            'email_pustakawan' => $request->email_pustakawan
+        ]);
+
+        return back()->with('success', 'Data pustakawan berhasil ditambahkan!');
+    }
+
+    public function hapusPengaturan($id)
+    {
+        $pengaturan = Pengaturan::findOrFail($id);
+        $pengaturan->delete();
+        
+        return back()->with('success', 'Data pustakawan berhasil dihapus!');
     }
 }

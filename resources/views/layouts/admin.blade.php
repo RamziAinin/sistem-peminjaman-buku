@@ -27,7 +27,6 @@
     <div id="sidebar-overlay" class="fixed inset-0 bg-gray-900 bg-opacity-50 z-20 hidden md:hidden transition-opacity" onclick="toggleSidebar()"></div>
 
     <!-- SIDEBAR ADMIN -->
-    <!-- Tambahan class: fixed, transform, -translate-x-full (untuk sembunyi di HP), md:relative, md:translate-x-0 (selalu muncul di PC) -->
     <aside id="sidebar" class="w-64 flex-shrink-0 border-r border-gray-200 flex flex-col h-full bg-white shadow-sm z-30 fixed inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 transition-transform duration-300 ease-in-out">
         
         <!-- Logo Area & Tombol Close (Mobile) -->
@@ -93,6 +92,13 @@
                 </svg>
                 Upload Database
             </a>
+
+            <!-- Menu Pengaturan Sistem -->
+            <a href="{{ route('admin.pengaturan') }}"
+                class="flex items-center gap-3 px-3 py-2.5 text-sm font-medium {{ request()->routeIs('admin.pengaturan') ? 'bg-TUA text-white shadow-sm' : 'text-gray-600 hover:bg-blue-50 hover:text-biru' }} rounded-lg transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                Pengaturan Sistem
+            </a>
         </nav>
 
         <!-- Tombol Logout -->
@@ -113,11 +119,9 @@
     </aside>
 
     <!-- KONTEN UTAMA ADMIN -->
-    <!-- Tambahan w-full agar di HP kontennya nggak kepotong -->
     <main class="flex-1 flex flex-col h-full overflow-y-auto w-full">
         
         <!-- Header Atas -->
-        <!-- Ubah px-8 jadi px-4 md:px-8 untuk HP -->
         <header class="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4 md:px-8 sticky top-0 z-10 shadow-sm flex-shrink-0">
             
             <div class="flex items-center gap-3">

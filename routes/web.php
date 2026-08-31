@@ -37,5 +37,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/admin/upload-database/proses', [App\Http\Controllers\AdminDashboardController::class, 'processUpload'])->name('admin.upload.process');
     // Route untuk nandain buku udah dikembalikan
     Route::post('/admin/peminjaman/{id}/kembali', [App\Http\Controllers\AdminDashboardController::class, 'tandaiDikembalikan'])->name('admin.kembali');
-    
+    Route::get('/admin/pengaturan', [AdminDashboardController::class, 'pengaturan'])->name('admin.pengaturan');
+    Route::post('/admin/pengaturan', [AdminDashboardController::class, 'updatePengaturan'])->name('admin.pengaturan.update');
+    Route::get('/admin/pengaturan', [AdminDashboardController::class, 'pengaturan'])->name('admin.pengaturan');
+Route::post('/admin/pengaturan', [AdminDashboardController::class, 'tambahPengaturan'])->name('admin.pengaturan.store');
+Route::delete('/admin/pengaturan/{id}', [AdminDashboardController::class, 'hapusPengaturan'])->name('admin.pengaturan.destroy');
 }); 
